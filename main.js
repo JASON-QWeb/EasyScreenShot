@@ -5,6 +5,17 @@ const os = require('os');
 
 let mainWindow;
 
+// Parse args manually since Electron combines own args
+// Structure is: electron_binary main.js --watch --output ...
+const args = process.argv.slice(2);
+const isWatch = args.includes('--watch');
+let outputDir = path.join(os.homedir(), 'Desktop');
+
+const outputIndex = args.indexOf('--output');
+if (outputIndex !== -1 && args[outputIndex + 1]) {
+    outputDir = args[outputIndex + 1];
+}
+
 function createWindow() {
     const primaryDisplay = screen.getPrimaryDisplay();
     const { width, height } = primaryDisplay.bounds;
@@ -20,7 +31,7 @@ function createWindow() {
         skipTaskbar: true,
         resizable: false,
         movable: false,
-        hasShadow: false, // Ensure we don't capture window shadow if possible
+        hasShadow: false,
         enableLargerThanScreen: true,
         webPreferences: {
             nodeIntegration: true,
@@ -29,7 +40,7 @@ function createWindow() {
     });
 
     mainWindow.loadFile('index.html');
-    mainWindow.setIgnoreMouseEvents(true, { forward: true }); // Default: Click-through
+    mainWindow.setIgnoreMouseEvents(true, { forward: true });
 }
 
 app.whenReady().then(() => {
@@ -57,12 +68,9 @@ ipcMain.on('save-screenshot', async (event, rect) => {
     const win = BrowserWindow.fromWebContents(event.sender);
     win.hide(); // Hide before capturing
 
-    // Wait a split second to ensure window is hidden
     setTimeout(async () => {
         try {
-            // Capture full screen
-            const displays = screen.getAllDisplays();
-            const primaryDisplay = screen.getPrimaryDisplay(); // Assume capturing primary for now
+            const primaryDisplay = screen.getPrimaryDisplay();
 
             const sources = await desktopCapturer.getSources({
                 types: ['screen'],
@@ -73,12 +81,6 @@ ipcMain.on('save-screenshot', async (event, rect) => {
             });
 
             const img = sources[0].thumbnail;
-
-            // Calculate crop coordinates (taking scale factor into account if needed)
-            // Electron coords are logical pixels. desktopCapturer uses physical pixels on some OS/versions
-            // But typically sources[0].thumbnail is scaled.
-            // Easiest is to use scaleFactor.
-
             const scale = primaryDisplay.scaleFactor;
             const cropRect = {
                 x: Math.round(rect.x * scale),
@@ -90,16 +92,23 @@ ipcMain.on('save-screenshot', async (event, rect) => {
             const crop = img.crop(cropRect);
             const pngBuffer = crop.toPNG();
 
-            const desktopDir = path.join(os.homedir(), 'Desktop');
             const pad = (n) => n.toString().padStart(2, "0");
             const now = new Date();
             const timestamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
             const filename = `Screenshot_${timestamp}.png`;
-            const filePath = path.join(desktopDir, filename);
+            const filePath = path.join(outputDir, filename);
 
             fs.writeFile(filePath, pngBuffer, (err) => {
                 if (err) console.error('Failed to save:', err);
-                app.quit();
+
+                if (isWatch) {
+                    // Restore window if watch mode
+                    win.show();
+                    console.log(`Saved to ${filePath}. Continuing...`);
+                } else {
+                    console.log(`Saved to ${filePath}. Exiting.`);
+                    app.quit();
+                }
             });
 
         } catch (e) {
