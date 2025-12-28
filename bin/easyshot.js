@@ -11,7 +11,7 @@ const { loadConfig, saveConfig } = require('./config');
 program
     .name('easyshot')
     .description('EasyScreenShot CLI Tool')
-    .version('1.0.1', '-v, --version', 'output the version number')
+    .version('1.0.2', '-v, --version', 'output the version number')
     .option('-w, --watch', 'Watch mode: Consistent capture (Do not exit after capture)', false)
     .option('-o, --output <dir>', 'Set default output directory for screenshots');
 
