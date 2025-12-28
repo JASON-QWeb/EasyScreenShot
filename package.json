@@ -1,7 +1,7 @@
 {
   "name": "easyscreen-shot",
-  "version": "1.0.0",
-  "description": "Cross-platform screenshot tool with Green Box UI",
+  "version": "1.0.1",
+  "description": "Screenshot tool for customize size and consistent shot",
   "main": "main.js",
   "bin": {
     "easyshot": "bin/easyshot.js"
@@ -11,13 +11,29 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "screenshot",
+    "electron",
+    "screen-capture",
+    "mac",
+    "windows",
+    "linux"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JASON-QWeb/EasyScreenShot.git"
+  },
+  "author": "jasonqweb",
+  "license": "MIT",
+  "homepage": "https://github.com/JASON-QWeb/EasyScreenShot#readme",
+  "bugs": {
+    "url": "https://github.com/JASON-QWeb/EasyScreenShot/issues"
+  },
   "devDependencies": {
-    "electron": "^39.2.7",
     "electron-builder": "^24.0.0"
   },
   "dependencies": {
-    "commander": "^14.0.2"
+    "commander": "^14.0.2",
+    "electron": "^39.2.7"
   }
 }
