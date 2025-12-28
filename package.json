@@ -1,6 +1,6 @@
 {
   "name": "easyscreen-shot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Screenshot tool for customize size and consistent shot",
   "main": "main.js",
   "bin": {
