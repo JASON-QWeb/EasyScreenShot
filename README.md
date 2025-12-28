@@ -3,7 +3,7 @@
 
 ## 核心优势
 
-- 支持自定义截图尺寸
+- 支持输入截图尺寸
 - 支持连续截图
 - 支持边调整后方内容边截图
 
@@ -24,16 +24,12 @@ easyshot
 截图后不退出，保持取景框位置，适合连续截取同一位置的内容
 ```bash
 easyshot -w
-# 或者
-easyshot --watch
 ```
 
 ### 自定义保存路径 (-o)
 将截图保存到指定文件夹
 ```bash
 easyshot -o ~/Documents
-# 或者
-easyshot --output /path/to/folder
 ```
 
 ### 查看帮助 (-h)
