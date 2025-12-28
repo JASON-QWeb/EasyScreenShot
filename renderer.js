@@ -25,8 +25,6 @@ function initBox() {
 }
 
 // Mouse Event Forwarding Logic
-// Elements that should catch clicks
-const interactiveElements = [selectionBox];
 
 selectionBox.addEventListener('mouseenter', () => {
     ipcRenderer.send('set-ignore-mouse-events', false);
@@ -87,14 +85,6 @@ window.addEventListener('mouseup', () => {
     isDragging = false;
     isResizing = false;
     document.body.style.cursor = 'default';
-
-    // Rerun click-through check
-    // If mouse is strictly OVER the box, keep interactive. 
-    // If outside, ignore.
-    // Actually, 'mouseleave' handles the "ignore" part. 
-    // If we released inside, we are fine.
-    // Exception: if we dragged OUTSIDE the box bounds (fast mouse), we need to check?
-    // Not critical for now.
 });
 
 function updateSelection(left, top, w, h) {
