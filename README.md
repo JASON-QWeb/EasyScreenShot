@@ -1,19 +1,19 @@
 # EasyScreenShot (EasyShot)
 
 
-## 核心优势
+## ✅ 核心优势
 
 - 支持输入截图尺寸
 - 支持连续截图
 - 支持边调整后方内容边截图
 
-## 安装
+## 📦 安装方法
 
 ```bash
-npm install -g .
+npm install -g easyscreen-shot
 ```
 
-## 使用方法
+## 📝 使用方法
 
 ### 基础截图
 ```bash
